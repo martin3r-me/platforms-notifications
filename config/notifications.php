@@ -27,4 +27,12 @@ return [
         'updated_at',
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Soll das Benachrichtigungs-Modal eingebunden werden?
+    |--------------------------------------------------------------------------
+    | Über .env steuerbar: NOTIFICATIONS_SHOW_MODAL=true/false
+    */
+    'show_modal' => env('NOTIFICATIONS_SHOW_MODAL', true), // true als Default
+
 ];

@@ -1,17 +1,14 @@
 {
-  "name": "martin3r-me/laravel-activity-log",
-  "require": {
-        "martin3r-me/laravel-ui-elements": "dev-main"
-    },
+  "name": "martin3r/platform-notifications",
   "autoload": {
     "psr-4": {
-      "Martin3r\\LaravelActivityLog\\": "src/"
+      "Platform\\Notifications\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Martin3r\\LaravelActivityLog\\ActivityLogServiceProvider"
+        "Platform\\Notifications\\NotificationsServiceProvider"
       ]
     }
   }
