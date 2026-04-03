@@ -65,25 +65,27 @@ class NotificationDispatcher
         $preferences = NotificationPreference::forUserAndType($user->id, $type)->get();
 
         $resolved = [];
+        $prefsByChannel = $preferences->keyBy('channel');
 
-        if ($preferences->isEmpty()) {
-            // No preferences set — use default_channels from type config
-            foreach ($typeConfig['default_channels'] as $channelKey) {
-                $channel = NotificationChannelRegistry::get($channelKey);
-                if ($channel && $channel->isConfiguredFor($user)) {
-                    $resolved[] = $channel;
-                }
-            }
-        } else {
-            // Use explicit user preferences
-            foreach ($preferences as $pref) {
+        // Check all default channels + any explicitly set channels
+        $allChannelKeys = collect($typeConfig['default_channels'])
+            ->merge($prefsByChannel->keys())
+            ->unique();
+
+        foreach ($allChannelKeys as $channelKey) {
+            $pref = $prefsByChannel->get($channelKey);
+
+            // Explicit preference exists → respect it
+            if ($pref !== null) {
                 if (! $pref->enabled) {
                     continue;
                 }
-                $channel = NotificationChannelRegistry::get($pref->channel);
-                if ($channel && $channel->isConfiguredFor($user)) {
-                    $resolved[] = $channel;
-                }
+            }
+            // No explicit preference → channel is in defaults, keep it
+
+            $channel = NotificationChannelRegistry::get($channelKey);
+            if ($channel && $channel->isConfiguredFor($user)) {
+                $resolved[] = $channel;
             }
         }
 
