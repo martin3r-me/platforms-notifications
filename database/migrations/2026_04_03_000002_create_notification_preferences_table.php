@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('channel');
             $table->boolean('enabled')->default(true);
             $table->timestamps();
-            $table->unique(['user_id', 'notification_type', 'channel']);
+            $table->unique(['user_id', 'notification_type', 'channel'], 'notif_pref_user_type_channel_unique');
         });
     }
 
