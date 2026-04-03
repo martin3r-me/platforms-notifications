@@ -26,7 +26,7 @@ class SendNotificationJob implements ShouldQueue
         public array $data,
         public int $userId,
     ) {
-        $this->queue = 'notifications';
+        $this->queue = 'default';
     }
 
     public function handle(): void
