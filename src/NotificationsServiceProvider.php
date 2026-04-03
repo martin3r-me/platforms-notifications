@@ -41,6 +41,9 @@ class NotificationsServiceProvider extends ServiceProvider
 
         // Notification Channels registrieren
         $this->registerNotificationChannels();
+
+        // LLM-Tools registrieren
+        $this->registerTools();
     }
 
     public function register(): void
@@ -52,6 +55,20 @@ class NotificationsServiceProvider extends ServiceProvider
         );
 
         $this->app->singleton(NotificationDispatcher::class);
+    }
+
+    protected function registerTools(): void
+    {
+        try {
+            $registry = resolve(\Platform\Core\Tools\ToolRegistry::class);
+
+            $registry->register(new \Platform\Notifications\Tools\ListNoticesTool());
+            $registry->register(new \Platform\Notifications\Tools\ListNotificationTypesTool());
+            $registry->register(new \Platform\Notifications\Tools\ListNotificationChannelsTool());
+            $registry->register(new \Platform\Notifications\Tools\ListNotificationPreferencesTool());
+        } catch (\Throwable $e) {
+            // Silent fail - ToolRegistry möglicherweise nicht verfügbar
+        }
     }
 
     protected function registerNotificationChannels(): void
