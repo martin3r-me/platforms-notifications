@@ -35,4 +35,23 @@ return [
     */
     'show_modal' => env('NOTIFICATIONS_SHOW_MODAL', true), // true als Default
 
+    /*
+    |--------------------------------------------------------------------------
+    | Pushover
+    |--------------------------------------------------------------------------
+    | Plattformweiter App-Token. User-Keys werden pro User in der DB gespeichert.
+    */
+    'pushover' => [
+        'app_token' => env('PUSHOVER_APP_TOKEN'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | MS Teams Webhook
+    |--------------------------------------------------------------------------
+    */
+    'teams_webhook' => [
+        'enabled' => env('TEAMS_WEBHOOK_ENABLED', false),
+    ],
+
 ];

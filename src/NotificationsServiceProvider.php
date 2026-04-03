@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use Platform\Notifications\Channels\DatabaseChannel;
+use Platform\Notifications\Channels\PushoverChannel;
+use Platform\Notifications\Channels\TeamsWebhookChannel;
 
 class NotificationsServiceProvider extends ServiceProvider
 {
@@ -35,6 +38,9 @@ class NotificationsServiceProvider extends ServiceProvider
 
         // Alle Livewire-Komponenten (inkl. Unterordner) registrieren
         $this->registerLivewireComponents();
+
+        // Notification Channels registrieren
+        $this->registerNotificationChannels();
     }
 
     public function register(): void
@@ -44,6 +50,15 @@ class NotificationsServiceProvider extends ServiceProvider
             __DIR__ . '/../config/notifications.php',
             'notifications'
         );
+
+        $this->app->singleton(NotificationDispatcher::class);
+    }
+
+    protected function registerNotificationChannels(): void
+    {
+        NotificationChannelRegistry::register(new DatabaseChannel());
+        NotificationChannelRegistry::register(new PushoverChannel());
+        NotificationChannelRegistry::register(new TeamsWebhookChannel());
     }
 
     /**
