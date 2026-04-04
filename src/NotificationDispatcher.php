@@ -3,7 +3,6 @@
 namespace Platform\Notifications;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Platform\Notifications\Channels\NotificationChannel;
 use Platform\Notifications\Jobs\SendNotificationJob;
 use Platform\Notifications\Models\NotificationPreference;
@@ -17,10 +16,6 @@ class NotificationDispatcher
         $typeConfig = NotificationTypeRegistry::get($notificationType);
 
         if (! $typeConfig) {
-            Log::warning('[NotificationDispatcher] Type not registered, skipping', [
-                'type' => $notificationType,
-                'registered_types' => array_keys(NotificationTypeRegistry::all()),
-            ]);
             return;
         }
 
@@ -30,12 +25,6 @@ class NotificationDispatcher
             }
 
             $channels = $this->resolveChannels($notificationType, $user, $typeConfig);
-
-            Log::info('[NotificationDispatcher] Resolved channels', [
-                'type' => $notificationType,
-                'user_id' => $user->id,
-                'channels' => array_map(fn ($c) => $c->key(), $channels),
-            ]);
 
             $notice = null;
 
